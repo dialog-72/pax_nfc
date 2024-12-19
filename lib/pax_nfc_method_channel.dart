@@ -16,16 +16,19 @@ class MethodChannelPaxNfc extends PaxNfcPlatform {
     return version;
   }
 
+  /// starts the detection threads
   @override
   Future<void> startNfcDetectionThreads() async {
     await methodChannel.invokeMethod<String>('startNfcDetectionThreads');
   }
 
+  /// stops the detection threads
   @override
   Future<void> stopNfcDetectionThreads() async {
     await methodChannel.invokeMethod<String>('stopNfcDetectionThreads');
   }
 
+  /// starts listening to the nfc stream and stops when it gets one
   @override
   Stream<String> listenNfcStream() {
     startNfcDetectionThreads();
