@@ -105,10 +105,12 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
   public void onDetachedFromActivity() {
     if (detectMThread != null){
       detectMThread.interrupt();
+      detectMThread = null;
     }
 
     if (detectABThread != null){
       detectABThread.interrupt();
+      detectABThread = null;
     }
 
   }
