@@ -1,3 +1,7 @@
+## 0.0.4
+
+- Opens RF when onAttachedToEngine is called and closes RF when onDetachedFromEngine is called
+
 ## 0.0.3
 
 - Opens RF on its own
