@@ -1,3 +1,7 @@
+## 0.0.3
+
+- Opens RF on its own
+
 ## 0.0.2
 
 - Adds comments to methods
