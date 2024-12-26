@@ -31,10 +31,16 @@ public class Detection {
     private static Context appContext;
     private static EPiccType piccType = EPiccType.INTERNAL;
 
+
     public static void setUp(Context ctx){
+
         appContext =  ctx;
         dal = getDal();
         picc = dal.getPicc(piccType);
+    }
+
+    public static void tearDown(){
+        close();
     }
 
     public static IDAL getDal(){
@@ -78,5 +84,21 @@ public class Detection {
             return 0;
         }
 
+    }
+
+    public static void open() {
+        try {
+            picc.open();
+        } catch (PiccDevException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void close() {
+        try {
+            picc.close();
+        } catch (PiccDevException e) {
+            e.printStackTrace();
+        }
     }
 }

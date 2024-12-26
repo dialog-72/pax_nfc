@@ -66,6 +66,7 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
         result.success("Android " + android.os.Build.VERSION.RELEASE);
         break;
       case "startNfcDetectionThreads":
+        Detection.open();
         detectMThread = new DetectMThread(NfcCardInfoHandler.handler);
         detectABThread = new DetectABThread(NfcCardInfoHandler.handler);
         detectMThread.start();
@@ -75,6 +76,7 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
       case "stopNfcDetectionThreads":
         detectMThread.interrupt();
         detectABThread.interrupt();
+        Detection.close();
         break;
       default:
         result.notImplemented();
@@ -112,6 +114,8 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
       detectABThread.interrupt();
       detectABThread = null;
     }
+
+//    Detection.tearDown();
 
   }
 
