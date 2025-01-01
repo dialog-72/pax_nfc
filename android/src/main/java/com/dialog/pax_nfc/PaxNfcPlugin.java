@@ -55,7 +55,7 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
   private boolean isPaxLibraryAvailable() {
     try {
       // Tentative de chargement pour vérifier si elle existe
-      System.loadLibrary("libpaxapijni");
+      System.loadLibrary("paxapijni");
       return true;
     } catch (UnsatisfiedLinkError e) {
       return false; // Bibliothèque introuvable
