@@ -28,6 +28,9 @@ import com.pax.dal.entity.PiccCardInfo;
 import com.pax.dal.exceptions.PiccDevException;
 import com.pax.neptunelite.api.NeptuneLiteUser;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 /** PaxNfcPlugin */
 public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -47,13 +50,23 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
 
   private EventChannel.EventSink eventSink;
 
+  private static final String CHANNEL = "com.dialog.pax_nfc";
+
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "pax_nfc");
+    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), CHANNEL);
     channel.setMethodCallHandler(this);
     appContext = flutterPluginBinding.getApplicationContext();
-    Detection.setUp(appContext);
-    Detection.open();
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        // Offload NFC setup to background thread
+        Detection.setUp(appContext);
+        Detection.open();
+
+      }
+    }).start();
+
     BinaryMessenger binaryMessenger = flutterPluginBinding.getBinaryMessenger();
     NfcCardInfoHandler nfcCardInfoHandler = new NfcCardInfoHandler();
     new EventChannel(binaryMessenger, "nfc_event_channel").setStreamHandler(nfcCardInfoHandler);
@@ -67,10 +80,24 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
         break;
       case "startNfcDetectionThreads":
 
-        detectMThread = new DetectMThread(NfcCardInfoHandler.handler);
-        detectABThread = new DetectABThread(NfcCardInfoHandler.handler);
-        detectMThread.start();
-        detectABThread.start();
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(new Runnable() {
+          @Override
+          public void run() {
+            Log.d("NFC", "Starting detection threads...");
+            try {
+
+            detectMThread = new DetectMThread(NfcCardInfoHandler.handler);
+            detectABThread = new DetectABThread(NfcCardInfoHandler.handler);
+            detectMThread.start();
+            detectABThread.start();
+            } catch (Exception e){
+              Log.e("NFC", "Error starting threads", e);
+            } finally {
+              executorService.shutdown();
+            }
+          }
+        });
         break;
 
       case "stopNfcDetectionThreads":
@@ -85,7 +112,13 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     Detection.close();
-    channel.setMethodCallHandler(null);
+    if (channel != null) {
+      channel.setMethodCallHandler(null);
+      channel = null;
+    }
+    if (appContext != null) {
+      appContext = null;
+    }
   }
 
   @Override

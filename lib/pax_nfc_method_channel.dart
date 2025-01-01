@@ -7,7 +7,7 @@ import 'pax_nfc_platform_interface.dart';
 class MethodChannelPaxNfc extends PaxNfcPlatform {
   /// The method channel used to interact with the native platform.
   @visibleForTesting
-  final methodChannel = const MethodChannel('pax_nfc');
+  final methodChannel = const MethodChannel('com.dialog.pax_nfc');
 
   @override
   Future<String?> getPlatformVersion() async {
