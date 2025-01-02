@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import dalvik.system.PathClassLoader;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -53,14 +54,23 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
   private static final String CHANNEL = "com.dialog.pax_nfc";
   // Vérifie si la bibliothèque est disponible sur l'appareil
   private boolean isPaxLibraryAvailable() {
-    try {
-      // Tentative de chargement pour vérifier si elle existe
-      System.loadLibrary("paxapijni");
-      return true;
-    } catch (UnsatisfiedLinkError e) {
-      return false; // Bibliothèque introuvable
-    }
+
+      String libraryPath = System.getProperty("java.library.path");
+      String libraryName = "paxapijni"; // Nom sans préfixe 'lib' et sans extension
+
+      PathClassLoader classLoader = new PathClassLoader(libraryPath, ClassLoader.getSystemClassLoader());
+
+      if(classLoader.findLibrary(libraryName) != null){
+        Log.d("pax_libs", "La bibliothèque JNI a été chargée avec succès !");
+        return true;
+      }
+
+    Log.d("pax_libs", "Erreur : Impossible de charger la bibliothèque JNI.");
+    return false;
   }
+
+
+
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), CHANNEL);
