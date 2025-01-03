@@ -1,6 +1,6 @@
 name: pax_nfc
 description: "A flutter package made to use the nfc features of pax payment terminals"
-version: 0.0.4
+version: 0.1.0
 repository: https://github.com/dialog-72/pax_nfc
 
 environment:
