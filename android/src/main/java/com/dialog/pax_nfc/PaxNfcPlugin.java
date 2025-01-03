@@ -50,7 +50,7 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
 
   public boolean isPaxLibraryAvailable(){
       // Chemin du fichier de la bibliothèque native
-      String libraryPath = "/data/app-lib/"; // Chemin valide pour Android
+      String libraryPath = System.getProperty("java.library.path");; // Chemin valide pour Android
       String libraryName = "paxapijni"; // Nom sans préfixe 'lib' ni extension
 
       // Créer un PathClassLoader
