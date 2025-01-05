@@ -1,3 +1,7 @@
+## 0.1.0
+
+- Checks for the presence of the libpaxapijni.so file before opening threads
+
 ## 0.0.4
 
 - Opens RF when onAttachedToEngine is called and closes RF when onDetachedFromEngine is called

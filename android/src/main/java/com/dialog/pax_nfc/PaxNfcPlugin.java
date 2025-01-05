@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import dalvik.system.PathClassLoader;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -47,16 +48,38 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
 
   private EventChannel.EventSink eventSink;
 
+  public boolean isPaxLibraryAvailable(){
+      // Chemin du fichier de la bibliothèque native
+      String libraryPath = System.getProperty("java.library.path");; // Chemin valide pour Android
+      String libraryName = "paxapijni"; // Nom sans préfixe 'lib' ni extension
+
+      // Créer un PathClassLoader
+      PathClassLoader classLoader = new PathClassLoader(libraryPath, ClassLoader.getSystemClassLoader());
+
+      String c = classLoader.findLibrary(libraryName);
+
+      if (c != null){
+        Log.d("com.dialog.pax_nfc", "libpaxapijni.so loaded successfully !");
+        return true;
+      } else {
+        Log.e("pax_nfc", "Error while loading the libpaxapijni.so library. This can mean you are not on a PAX device.");
+        return false;
+      }
+  }
+
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-    channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "pax_nfc");
-    channel.setMethodCallHandler(this);
-    appContext = flutterPluginBinding.getApplicationContext();
-    Detection.setUp(appContext);
-    Detection.open();
-    BinaryMessenger binaryMessenger = flutterPluginBinding.getBinaryMessenger();
-    NfcCardInfoHandler nfcCardInfoHandler = new NfcCardInfoHandler();
-    new EventChannel(binaryMessenger, "nfc_event_channel").setStreamHandler(nfcCardInfoHandler);
+
+    if (isPaxLibraryAvailable()) {
+      channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "pax_nfc");
+      channel.setMethodCallHandler(this);
+      appContext = flutterPluginBinding.getApplicationContext();
+      Detection.setUp(appContext);
+      Detection.open();
+      BinaryMessenger binaryMessenger = flutterPluginBinding.getBinaryMessenger();
+      NfcCardInfoHandler nfcCardInfoHandler = new NfcCardInfoHandler();
+      new EventChannel(binaryMessenger, "nfc_event_channel").setStreamHandler(nfcCardInfoHandler);
+    }
   }
 
   @Override
