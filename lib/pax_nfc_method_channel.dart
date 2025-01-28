@@ -28,14 +28,16 @@ class MethodChannelPaxNfc extends PaxNfcPlatform {
     await methodChannel.invokeMethod<String>('stopNfcDetectionThreads');
   }
 
-  /// starts listening to the nfc stream and stops when it gets one
+  /// starts listening to the nfc stream
   @override
   Stream<String> listenNfcStream() {
     startNfcDetectionThreads();
     const eventChannel = EventChannel('nfc_event_channel');
     final eventStream = eventChannel.receiveBroadcastStream();
     return eventStream.map((event) {
+      /// stopping and starting because once a thread has detected a card, it cannot be reused and has to be intialized again
       stopNfcDetectionThreads();
+      startNfcDetectionThreads();
       return event.toString();
     });
   }

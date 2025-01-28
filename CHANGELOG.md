@@ -1,3 +1,7 @@
+## 0.1.1
+
+- Does not close the threads upon detection anymore and now restart them
+
 ## 0.1.0
 
 - Checks for the presence of the libpaxapijni.so file before opening threads
