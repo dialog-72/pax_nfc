@@ -54,5 +54,6 @@ android {
 }
 
 dependencies {
-    implementation files('..\\example\\android\\app\\libs\\NeptuneLiteApi_V4.09.00_20240909.jar')
+
+implementation files('app/libs/neptune-lite-api-v3.26.00-20210903.jar')
 }

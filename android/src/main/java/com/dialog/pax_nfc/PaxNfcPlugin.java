@@ -42,11 +42,8 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
   public DetectMThread detectMThread;
   public DetectABThread detectABThread;
 
-  public static  String detectionResponse;
+  private NfcCardInfoHandler nfcCardInfoHandler;
 
-  private EventChannel eventChannel;
-
-  private EventChannel.EventSink eventSink;
 
   public boolean isPaxLibraryAvailable(){
       // Chemin du fichier de la bibliothèque native
@@ -77,7 +74,7 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
       Detection.setUp(appContext);
       Detection.open();
       BinaryMessenger binaryMessenger = flutterPluginBinding.getBinaryMessenger();
-      NfcCardInfoHandler nfcCardInfoHandler = new NfcCardInfoHandler();
+      nfcCardInfoHandler = new NfcCardInfoHandler();
       new EventChannel(binaryMessenger, "nfc_event_channel").setStreamHandler(nfcCardInfoHandler);
     }
   }
@@ -89,11 +86,12 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
         result.success("Android " + android.os.Build.VERSION.RELEASE);
         break;
       case "startNfcDetectionThreads":
-
-        detectMThread = new DetectMThread(NfcCardInfoHandler.handler);
-        detectABThread = new DetectABThread(NfcCardInfoHandler.handler);
-        detectMThread.start();
-        detectABThread.start();
+        if (nfcCardInfoHandler != null) {
+            detectMThread = new DetectMThread(nfcCardInfoHandler.getHandler());
+            detectABThread = new DetectABThread(nfcCardInfoHandler.getHandler());
+            detectMThread.start();
+            detectABThread.start();
+        }
         break;
 
       case "stopNfcDetectionThreads":

@@ -37,6 +37,11 @@ public class Detection {
         appContext =  ctx;
         dal = getDal();
         picc = dal.getPicc(piccType);
+        try {
+            picc.open();
+        } catch (PiccDevException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void tearDown(){
@@ -62,6 +67,7 @@ public class Detection {
             PiccCardInfo cardInfo = picc.detect(mode);
             return cardInfo;
         } catch (PiccDevException e) {
+            Log.e("pax_nfc", "Error while detecting card: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -76,7 +82,12 @@ public class Detection {
             message.what = 0;
             message.obj = Convert.getInstance().bcdToStr(
                     (cardInfo.getSerialInfo() == null) ? "".getBytes() : cardInfo.getSerialInfo());
+            System.out.println("message:" + message.obj);
+            if (message.obj == null){
+                return 0;
+            }
             handler.sendMessage(message);
+
 
             return 1;
         } else {
@@ -87,17 +98,28 @@ public class Detection {
     }
 
     public static void open() {
-        try {
-            picc.open();
-        } catch (PiccDevException e) {
-            e.printStackTrace();
-        }
+        int retries = 3;
+        while (retries > 0) {
+            try {
+                picc.open();
+                Log.d("pax_nfc", "PICC opened successfully.");
+                return; // Success
+            } catch (PiccDevException e) {
+                Log.e("pax_nfc", "Error opening PICC: " + e.getMessage() + ". Retries left: " + (retries - 1));
+                e.printStackTrace();
+                retries--;
+                if (retries > 0) {
+                    SystemClock.sleep(500); // Wait 500ms before retrying
+                }
+            }        }
+        Log.e("pax_nfc", "Failed to open PICC after multiple retries.");
     }
 
     public static void close() {
         try {
             picc.close();
         } catch (PiccDevException e) {
+            Log.e("pax_nfc", "Error closing PICC: " + e.getMessage());
             e.printStackTrace();
         }
     }
