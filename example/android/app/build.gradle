@@ -32,26 +32,7 @@ android {
             abiFilters "arm64-v8a", "armeabi-v7a"
         }
     }
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['src/main/jniLibs']
-            jni.srcDirs = []
-        }
-    }
 
-    packagingOptions {
-        jniLibs {
-            useLegacyPackaging true
-        }
-        pickFirst '**/libc++_shared.so'
-        pickFirst '**/libDeviceConfig.so'
-        pickFirst '**/libpaxcanvas.so'
-        pickFirst '**/libHDSD.so'
-        pickFirst '**/libZBarDecoder.so'
-        pickFirst '**/libdecoder_jni.so'
-        pickFirst '**/libiconv.so'
-        pickFirst '**/libIGLBarDecoder.so'
-    }
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -61,7 +42,7 @@ android {
             shrinkResources true // This helps reduce APK size further
 
             // Apply the ProGuard rules file.
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
             ndk {
                 abiFilters 'armeabi-v7a', 'arm64-v8a'
