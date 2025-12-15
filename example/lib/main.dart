@@ -17,17 +17,6 @@ class _MyAppState extends State<MyApp> {
   final _paxNfcPlugin = PaxNfc();
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final sp = await SharedPreferences.getInstance();
-      sp.setString('key', 'value');
-      final String? s = sp.getString('key');
-      print(s);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(

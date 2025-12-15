@@ -1,3 +1,6 @@
+## 1.0.0
+
+
 ## 0.1.1
 
 - Does not close the threads upon detection anymore and now restart them
