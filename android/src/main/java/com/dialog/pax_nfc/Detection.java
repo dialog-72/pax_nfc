@@ -9,20 +9,13 @@ import android.widget.Toast;
 
 import com.pax.dal.IDAL;
 import com.pax.dal.IPicc;
-import com.pax.dal.entity.ApduSendInfo;
-import com.pax.dal.entity.EBeepMode;
 import com.pax.dal.entity.EDetectMode;
-import com.pax.dal.entity.EM1KeyType;
-import com.pax.dal.entity.EPiccRemoveMode;
 import com.pax.dal.entity.EPiccType;
 import com.pax.dal.entity.PiccCardInfo;
-import com.pax.dal.exceptions.EPiccDevException;
 import com.pax.dal.exceptions.PiccDevException;
 import com.pax.neptunelite.api.NeptuneLiteUser;
 
 import util.Convert;
-import util.IApdu;
-import util.Packer;
 
 public class Detection {
 

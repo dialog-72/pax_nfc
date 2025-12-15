@@ -1,16 +1,12 @@
 package com.dialog.pax_nfc;
 
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import dalvik.system.PathClassLoader;
-import dalvik.system.DexClassLoader;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -20,17 +16,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
-import android.content.Context;
-import com.pax.dal.IDAL;
-import com.pax.dal.IPicc;
-import com.pax.dal.entity.EDetectMode;
-import com.pax.dal.entity.EM1KeyType;
-import com.pax.dal.entity.EPiccType;
-import com.pax.dal.entity.PiccCardInfo;
-import com.pax.dal.exceptions.PiccDevException;
-import com.pax.neptunelite.api.NeptuneLiteUser;
 
-import java.io.File;
 
 
 /** PaxNfcPlugin */
