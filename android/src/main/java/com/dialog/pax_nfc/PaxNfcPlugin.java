@@ -82,13 +82,8 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
       nfcCardInfoHandler = new NfcCardInfoHandler();
       new EventChannel(binaryMessenger, "nfc_event_channel").setStreamHandler(nfcCardInfoHandler);
 
-
-
-      Thread detectionThread = new Thread(() -> {
-          Detection.setUp(appContext);
-          Detection.open();
-      });
-      detectionThread.start();
+      Detection.setUp(appContext);
+      Detection.open();
 
     }
   }
