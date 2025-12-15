@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import dalvik.system.PathClassLoader;
+import dalvik.system.DexClassLoader;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -29,6 +30,8 @@ import com.pax.dal.entity.PiccCardInfo;
 import com.pax.dal.exceptions.PiccDevException;
 import com.pax.neptunelite.api.NeptuneLiteUser;
 
+import java.io.File;
+
 
 /** PaxNfcPlugin */
 public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -42,6 +45,7 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
   public DetectMThread detectMThread;
   public DetectABThread detectABThread;
 
+  String TAG = "com.dialog.pax_nfc";
   private NfcCardInfoHandler nfcCardInfoHandler;
 
 
@@ -62,6 +66,8 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
         Log.e("pax_nfc", "Error while loading the libpaxapijni.so library. This can mean you are not on a PAX device.");
         return false;
       }
+
+
   }
 
   @Override
@@ -71,11 +77,19 @@ public class PaxNfcPlugin implements FlutterPlugin, MethodCallHandler, ActivityA
       channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "pax_nfc");
       channel.setMethodCallHandler(this);
       appContext = flutterPluginBinding.getApplicationContext();
-      Detection.setUp(appContext);
-      Detection.open();
+
       BinaryMessenger binaryMessenger = flutterPluginBinding.getBinaryMessenger();
       nfcCardInfoHandler = new NfcCardInfoHandler();
       new EventChannel(binaryMessenger, "nfc_event_channel").setStreamHandler(nfcCardInfoHandler);
+
+
+
+      Thread detectionThread = new Thread(() -> {
+          Detection.setUp(appContext);
+          Detection.open();
+      });
+      detectionThread.start();
+
     }
   }
 

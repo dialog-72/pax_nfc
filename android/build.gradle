@@ -32,9 +32,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+>
 
     defaultConfig {
         minSdk = 21
+        ndk {
+            abiFilters "arm64-v8a", "armeabi-v7a"
+        }
     }
 
     dependencies {
@@ -54,7 +58,6 @@ android {
 }
 
 dependencies {
-
-
-implementation files('app/libs/NeptuneLiteApi_V4.09.00_20240909.jar')
+    implementation files('app/libs/NeptuneLiteApi_V4.09.00_20240909.jar')
+    implementation files('libs/NeptuneLiteApi_V4.09.00_20240909.jar')
 }

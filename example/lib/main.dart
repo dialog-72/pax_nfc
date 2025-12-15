@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pax_nfc/pax_nfc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +15,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _paxNfcPlugin = PaxNfc();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final sp = await SharedPreferences.getInstance();
+      sp.setString('key', 'value');
+      final String? s = sp.getString('key');
+      print(s);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
