@@ -67,6 +67,5 @@ flutter {
     source = "../.."
 }
 dependencies {
-
-implementation files('libs/NeptuneLiteApi_V4.09.00_20240909.jar')
+    implementation files('libs/NeptuneLiteApi_V4.15.00_20250606.jar')
 }
