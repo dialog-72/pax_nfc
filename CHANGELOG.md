@@ -1,13 +1,17 @@
+## 1.1.0
+
+- Bumped NeptuneLiteApi version to V4.15.00_20250606
+
 ## 1.0.0
 
-* Bumped compileSdk to 36
-* Upgraded gradle to 8.13.2
-* Deleted unnecessary native libs folders
-* The handler now does not send a message to the sink upon card read failure
-* Added a picc.open() retry loop
-* Refactored Handler declaration to prevent deprecations
-* Bumped Kotlin verison to 2.2.21
-* Deleted unused imports
+- Bumped compileSdk to 36
+- Upgraded gradle to 8.13.2
+- Deleted unnecessary native libs folders
+- The handler now does not send a message to the sink upon card read failure
+- Added a picc.open() retry loop
+- Refactored Handler declaration to prevent deprecations
+- Bumped Kotlin verison to 2.2.21
+- Deleted unused imports
 
 ## 0.1.1
 
@@ -31,4 +35,5 @@
 
 ## 0.0.1
 
-* Makes Mifare and Desfire cards readable on Pax devices (tested on A920 Pro)
+- Makes Mifare and Desfire cards readable on Pax devices (tested on A920 Pro)
+
